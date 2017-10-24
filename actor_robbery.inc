@@ -171,7 +171,7 @@ public RunActorAnimationSequence(playerid, actorid, animation_pattern)
 		
 			for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++)
 			{
-				if(!IsPlayerConnected(playerid)) { continue; }
+				if(!IsPlayerConnected(i)) { continue; }
 				PlayerPlaySound(i, 3401, x, y, z);
 			}
 		}
