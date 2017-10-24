@@ -202,7 +202,7 @@ public RunActorAnimationSequence(playerid, actorid, animation_pattern)
 			{
 				OnPlayerFinishRobbery(playerid, actorid, (random(robbery_data[actorid][money_max] - robbery_data[actorid][money_min]) + robbery_data[actorid][money_min]), TYPE_SUCCESS);
 			}
-				else OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_FAILED);
+			else OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_FAILED);
 		}
 		case 3:
 		{
@@ -222,8 +222,8 @@ public OnPlayerConnect(playerid)
 	PreloadAnimLib(playerid, "SHOP");
 
 	#if defined actorrob_OnPlayerConnect
-    	actorrob_OnPlayerConnect(playerid);
-    #endif
+    		actorrob_OnPlayerConnect(playerid);
+    	#endif
 	return 1;
 }
 
@@ -231,26 +231,26 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if((newkeys & KEY_AIM) == KEY_AIM && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 	{
-    	switch(GetPlayerWeapon(playerid))
-    	{
-        	case 22 .. 33: 
-    		{
-            	new actorid = GetPlayerCameraTargetActor(playerid);
-                
-            	if(actorid == INVALID_ACTOR_ID)
-                	return 1;
+		switch(GetPlayerWeapon(playerid))
+		{
+			case 22 .. 33: 
+			{
+				new actorid = GetPlayerCameraTargetActor(playerid);
 
-            	if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME)
-    				return OnPlayerStartRobbery(playerid, actorid, 1);
+				if(actorid == INVALID_ACTOR_ID)
+					return 1;
 
-    			robbery_data[actorid][actor_robbedRecently] = gettime();
-            	RunActorAnimationSequence(playerid, actorid, 0);
-        	}
-    	}
+				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME)
+						return OnPlayerStartRobbery(playerid, actorid, 1);
+
+					robbery_data[actorid][actor_robbedRecently] = gettime();
+				RunActorAnimationSequence(playerid, actorid, 0);
+			}
+		}
 	}
-    #if defined actorrob_OnPlayerKeyStateChange
-        actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
-    #else
+   	#if defined actorrob_OnPlayerKeyStateChange
+        	actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+    	#else
    	 	return 1;
 	#endif
 
