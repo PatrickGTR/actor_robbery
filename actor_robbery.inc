@@ -40,9 +40,9 @@ enum E_ACTOR_ROBBERY_DATA
 	bool:actor_created,
 	actor_robbedRecently
 }
-new 
-	robbery_data[MAX_ROBBERY_ACTORS][E_ACTOR_ROBBERY_DATA],
-	i_actor = 0;
+static new 
+		robbery_data[MAX_ROBBERY_ACTORS][E_ACTOR_ROBBERY_DATA],
+		i_actor = 0;
 
 forward RunActorAnimationSequence(playerid, actorid, animation_pattern);
 forward OnPlayerStartRobbery(playerid, actorid, robbed_recently);
@@ -114,7 +114,7 @@ CreateActorRobbery(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwid = 0,
 		* &r_moneymax -> Maximum money to be robbed from the robbery actor
 */
 
-GetActorRobberyData(actorid, &skinid, &Float:x, &Float:y, &Float:z, &Float:ang, &actor_vwid, &r_moneymin, &r_moneymax)
+stock GetActorRobberyData(actorid, &skinid, &Float:x, &Float:y, &Float:z, &Float:ang, &actor_vwid, &r_moneymin, &r_moneymax)
 {
 	if(actorid == INVALID_ACTOR_ID)
 		return 1;
@@ -142,7 +142,7 @@ Param:
 
 */
 
-GetActorFreeID() 
+static GetActorFreeID() 
 {
 	for(new i = 0; i < MAX_ROBBERY_ACTORS; i++) 
 	{ 
@@ -243,7 +243,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME)
 						return OnPlayerStartRobbery(playerid, actorid, 1);
 
-					robbery_data[actorid][actor_robbedRecently] = gettime();
+				robbery_data[actorid][actor_robbedRecently] = gettime();
 				RunActorAnimationSequence(playerid, actorid, 0);
 			}
 		}
