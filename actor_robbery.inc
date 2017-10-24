@@ -157,55 +157,52 @@ GetActorFreeID()
 
 public RunActorAnimationSequence(playerid, actorid, animation_pattern)
 {
-
 	switch(animation_pattern)
 	{
 		case 0:
 		{
 			ClearActorAnimations(actorid);
-            ApplyActorAnimation(actorid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 0);
-
-            SetTimerEx("RunActorAnimationSequence", 1000 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 1);
-
+			ApplyActorAnimation(actorid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 0);
+		
+			SetTimerEx("RunActorAnimationSequence", 1000 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 1);
+		
 			new Float:x, Float:y, Float:z;
-            GetPlayerPos(playerid, x, y, z);
-
-            for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++)
-            {
-            	if(!IsPlayerConnected(playerid)) { continue; }
-            	PlayerPlaySound(i, 3401, x, y, z);
-            }
+			GetPlayerPos(playerid, x, y, z);
+		
+			for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++)
+			{
+				if(!IsPlayerConnected(playerid)) { continue; }
+				PlayerPlaySound(i, 3401, x, y, z);
+			}
 		}
 		case 1:
 		{
-            if(!IsPlayerInRangeOfPoint(playerid, 10.0, robbery_data[actorid][actor_x], robbery_data[actorid][actor_y], robbery_data[actorid][actor_z]))
-            {
-               OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_UNFINISHED);
-            }
-            else 
-            {
-                ClearActorAnimations(actorid);
-                ApplyActorAnimation(actorid, "SHOP", "SHP_Rob_GiveCash", 4.1, 0, 1, 1, 1, 0);
-
-                SetTimerEx("RunActorAnimationSequence", 1000 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 2);
-            }
+			if(!IsPlayerInRangeOfPoint(playerid, 10.0, robbery_data[actorid][actor_x], robbery_data[actorid][actor_y], robbery_data[actorid][actor_z]))
+			{
+				OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_UNFINISHED);
+			}
+			else 
+			{
+				ClearActorAnimations(actorid);
+				ApplyActorAnimation(actorid, "SHOP", "SHP_Rob_GiveCash", 4.1, 0, 1, 1, 1, 0);
+			
+				SetTimerEx("RunActorAnimationSequence", 1000 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 2);
+			}
 		}
 		case 2:
 		{
-            ClearActorAnimations(actorid);
-            ApplyActorAnimation(actorid, "PED", "DUCK_cower", 4.1, 1, 1, 1, 1, 1);
-
-            SetTimerEx("RunActorAnimationSequence", 1000 * 60 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 3);
-
-            new 
-                robberyChance = random(100);
-            if(robberyChance > 40)
-            {
-                OnPlayerFinishRobbery(playerid, actorid, (random(robbery_data[actorid][money_max] - robbery_data[actorid][money_min]) + robbery_data[actorid][money_min]), TYPE_SUCCESS);
-            }
-            else OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_FAILED);
-
-            
+			ClearActorAnimations(actorid);
+			ApplyActorAnimation(actorid, "PED", "DUCK_cower", 4.1, 1, 1, 1, 1, 1);
+		
+			SetTimerEx("RunActorAnimationSequence", 1000 * 60 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 3);
+		
+			new 
+			robberyChance = random(100);
+			if(robberyChance > 40)
+			{
+				OnPlayerFinishRobbery(playerid, actorid, (random(robbery_data[actorid][money_max] - robbery_data[actorid][money_min]) + robbery_data[actorid][money_min]), TYPE_SUCCESS);
+			}
+				else OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_FAILED);
 		}
 		case 3:
 		{
@@ -224,33 +221,33 @@ public OnPlayerConnect(playerid)
 	PreloadAnimLib(playerid, "PED");
 	PreloadAnimLib(playerid, "SHOP");
 
-    #if defined actorrob_OnPlayerConnect
-        actorrob_OnPlayerConnect(playerid);
+	#if defined actorrob_OnPlayerConnect
+    	actorrob_OnPlayerConnect(playerid);
     #endif
-    return 1;
+	return 1;
 }
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {
 	if((newkeys & KEY_AIM) == KEY_AIM && GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
-    {
-        switch(GetPlayerWeapon(playerid))
-        {
-            case 22 .. 33: 
-            {
-                new actorid = GetPlayerCameraTargetActor(playerid);
+	{
+    	switch(GetPlayerWeapon(playerid))
+    	{
+        	case 22 .. 33: 
+    		{
+            	new actorid = GetPlayerCameraTargetActor(playerid);
                 
-                if(actorid == INVALID_ACTOR_ID)
-                    return 1;
+            	if(actorid == INVALID_ACTOR_ID)
+                	return 1;
 
-                if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME)
-        			return OnPlayerStartRobbery(playerid, actorid, 1);
+            	if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME)
+    				return OnPlayerStartRobbery(playerid, actorid, 1);
 
-        		robbery_data[actorid][actor_robbedRecently] = gettime();
-                RunActorAnimationSequence(playerid, actorid, 0);
-            }
-        }
-    }
+    			robbery_data[actorid][actor_robbedRecently] = gettime();
+            	RunActorAnimationSequence(playerid, actorid, 0);
+        	}
+    	}
+	}
     #if defined actorrob_OnPlayerKeyStateChange
         actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
     #else
