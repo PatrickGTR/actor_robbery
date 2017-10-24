@@ -62,4 +62,3 @@ forward OnPlayerStartRobbery(playerid, actorid, robbed_recently);
 
 //OnPlayerFinishRobbery is called when the 3 animation sequence has been played.
 forward OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type);
-```
