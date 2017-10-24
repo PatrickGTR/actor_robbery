@@ -92,7 +92,7 @@ CreateActorRobbery(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwid = 0,
 	robbery_data[actorid][money_min] = r_moneymin;
 	robbery_data[actorid][money_max] = r_moneymax;
 
-	return (++ i_actor - 1); 
+	return (i_actor++); 
 }
 
 /*
