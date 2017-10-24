@@ -27,8 +27,7 @@ Param:
 * actor_vwid -> virtualid of the robbery actor
 * r_moneymin -> Minimum money to be robbed from the robbery actor
 * r_moneymax -> Maximum money to be robbed from the robbery actor
-[/code]
-[code]
+
 Function:
 	GetActorRobberyData
 
