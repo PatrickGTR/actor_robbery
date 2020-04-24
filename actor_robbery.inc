@@ -226,7 +226,7 @@ public OnPlayerConnect(playerid)
 	PreloadAnimLib(playerid, "SHOP");
 
 	#if defined actorrob_OnPlayerConnect
-		actorrob_OnPlayerConnect(playerid);
+		return actorrob_OnPlayerConnect(playerid);
 	#else
 		return 1;
 	#endif
@@ -256,11 +256,10 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 	}
    	#if defined actorrob_OnPlayerKeyStateChange
-		actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
-    	#else
-   	 	return 1;
+		return actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
+	#else 
+   		return 1;
 	#endif
-
 }
 
 //OnPlayerKeyStateChange hook directives
@@ -274,7 +273,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 #define OnPlayerKeyStateChange actorrob_OnPlayerKeyStateChange
 
 #if defined actorrob_OnPlayerKeyStateChange
-    forward actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+    forward actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 #endif
 
 //OnPlayerConnect directives
