@@ -68,14 +68,24 @@ forward OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type);
 
 */
 
-stock CreateActorRobbery(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwid = 0, r_moneymin = MIN_MONEY_ROB, r_moneymax = MAX_MONEY_ROB)
-{
 
+
+#pragma deprecated GetActorRobberyData
+stock GetActorRobberyData(actorid, &skinid, &Float:x, &Float:y, &Float:z, &Float:ang, &actor_vwid, &r_moneymin, &r_moneymax) {
+	#pragma unused actorid, skinid, x, y, z, ang, actor_vwid, r_moneymin, r_moneymax
+}
+
+#pragma deprecated Please use new function name Robbery_CreateActor.
+stock CreateActorRobbery(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwid = 0, r_moneymin = MIN_MONEY_ROB, r_moneymax = MAX_MONEY_ROB) {
+	#pragma unused skinid, x, y, z, ang, actor_vwid, r_moneymin, r_moneymax
+	return -1;
+}
+
+stock Robbery_CreateActor(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwid = 0, r_moneymin = MIN_MONEY_ROB, r_moneymax = MAX_MONEY_ROB) {
 	new actorid = GetActorFreeID();
 
-	if(actorid == -1)
-	{
-		print("ERROR: MAX_ROBBERY_ACTOR reached, increase the limit size.");
+	if(actorid == -1) {
+		print("ERROR: Robbery_CreateActor - MAX_ROBBERY_ACTOR reached, increase the limit size.");
 		return -1;
 	}
 
@@ -92,12 +102,12 @@ stock CreateActorRobbery(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwi
 	robbery_data[actorid][money_min] = r_moneymin;
 	robbery_data[actorid][money_max] = r_moneymax;
 
-	return (++ i_actor - 1); 
+	return (i_actor ++); 
 }
 
 /*
 	Function:
-		GetActorRobberyData
+		Robbery_GetActorData
 
 	Info:
 		Retrieves the actor data
@@ -114,10 +124,11 @@ stock CreateActorRobbery(skinid, Float:x, Float:y, Float:z, Float:ang, actor_vwi
 		* &r_moneymax -> Maximum money to be robbed from the robbery actor
 */
 
-stock GetActorRobberyData(actorid, &skinid, &Float:x, &Float:y, &Float:z, &Float:ang, &actor_vwid, &r_moneymin, &r_moneymax)
-{
-	if(actorid == INVALID_ACTOR_ID)
+stock Robbery_GetActorData(actorid, &skinid, &Float:x, &Float:y, &Float:z, &Float:ang, &actor_vwid, &r_moneymin, &r_moneymax) {
+	if(actorid == INVALID_ACTOR_ID) {	
+		print("ERROR: GetActorRobberyData - Invalid actorid input.");
 		return 1;
+	}
 
 	skinid = robbery_data[actorid][actor_skin];
 	x = robbery_data[actorid][actor_x];
@@ -142,11 +153,12 @@ Param:
 
 */
 
-static GetActorFreeID() 
+static stock GetActorFreeID() 
 {
-	for(new i = 0; i < MAX_ROBBERY_ACTORS; i++) 
-	{ 
-		if(!robbery_data[i][actor_created]) return i;
+	for(new i = 0; i < MAX_ROBBERY_ACTORS; i++)  { 
+		if(!robbery_data[i][actor_created]) {
+			return i;
+		}
 	}
 	return -1;
 }
@@ -155,12 +167,9 @@ static GetActorFreeID()
 	Robbery IMPL
 */
 
-public RunActorAnimationSequence(playerid, actorid, animation_pattern)
-{
-	switch(animation_pattern)
-	{
-		case 0:
-		{
+public RunActorAnimationSequence(playerid, actorid, animation_pattern) {
+	switch(animation_pattern) {
+		case 0: {
 			ClearActorAnimations(actorid);
 			ApplyActorAnimation(actorid, "SHOP", "SHP_Rob_HandsUp", 4.1, 0, 1, 1, 1, 0);
 		
@@ -169,47 +178,42 @@ public RunActorAnimationSequence(playerid, actorid, animation_pattern)
 			new Float:x, Float:y, Float:z;
 			GetPlayerPos(playerid, x, y, z);
 		
-			for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++)
-			{
-				if(!IsPlayerConnected(i)) { continue; }
+			for(new i = 0, j = GetPlayerPoolSize(); i <= j; i++) {
+				if(!IsPlayerConnected(i)) { 
+					continue; 
+				}
 				PlayerPlaySound(i, 3401, x, y, z);
 			}
 		}
-		case 1:
-		{
-			if(!IsPlayerInRangeOfPoint(playerid, 10.0, robbery_data[actorid][actor_x], robbery_data[actorid][actor_y], robbery_data[actorid][actor_z]))
-			{
-				OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_UNFINISHED);
+		case 1: {
+			if(!IsPlayerInRangeOfPoint(playerid, 10.0, robbery_data[actorid][actor_x], robbery_data[actorid][actor_y], robbery_data[actorid][actor_z])) {
+				CallLocalFunction("OnPlayerFinishRobbery", "iiii", playerid, actorid, 0, TYPE_UNFINISHED);
 			}
-			else 
-			{
+			else {
 				ClearActorAnimations(actorid);
 				ApplyActorAnimation(actorid, "SHOP", "SHP_Rob_GiveCash", 4.1, 0, 1, 1, 1, 0);
 			
 				SetTimerEx("RunActorAnimationSequence", 1000 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 2);
 			}
 		}
-		case 2:
-		{
+		case 2: {
 			ClearActorAnimations(actorid);
 			ApplyActorAnimation(actorid, "PED", "DUCK_cower", 4.1, 1, 1, 1, 1, 1);
 		
 			SetTimerEx("RunActorAnimationSequence", 1000 * 60 * ROBBERY_WAIT_TIME, false, "iii", playerid, actorid, 3);
 		
-			new 
-			robberyChance = random(100);
-			if(robberyChance > 40)
-			{
-				OnPlayerFinishRobbery(playerid, actorid, (random(robbery_data[actorid][money_max] - robbery_data[actorid][money_min]) + robbery_data[actorid][money_min]), TYPE_SUCCESS);
+			new robberyChance = random(100);
+			if(robberyChance > 40) {
+				CallLocalFunction("OnPlayerFinishRobbery", "iiii", playerid, actorid, (random(robbery_data[actorid][money_max] - robbery_data[actorid][money_min]) + robbery_data[actorid][money_min]), TYPE_SUCCESS);
 			}
-			else OnPlayerFinishRobbery(playerid, actorid, 0, TYPE_FAILED);
+			else {
+				CallLocalFunction("OnPlayerFinishRobbery", "iiii", playerid, actorid, 0, TYPE_FAILED);
+			}
 		}
-		case 3:
-		{
+		case 3: {
 			ClearActorAnimations(actorid);
 			PlayerPlaySound(playerid, 0, 0.0, 0.0, 0.0);
 		}
-
 	}
 	return 1;
 }
@@ -222,9 +226,10 @@ public OnPlayerConnect(playerid)
 	PreloadAnimLib(playerid, "SHOP");
 
 	#if defined actorrob_OnPlayerConnect
-    		actorrob_OnPlayerConnect(playerid);
+		actorrob_OnPlayerConnect(playerid);
+	#else
+		return 1;
 	#endif
-	return 1;
 }
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
@@ -237,11 +242,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				new actorid = GetPlayerCameraTargetActor(playerid);
 
-				if(actorid == INVALID_ACTOR_ID)
+				if(actorid == INVALID_ACTOR_ID) {
 					return 1;
+				}
 
-				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME)
-						return OnPlayerStartRobbery(playerid, actorid, 1);
+				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME) {
+					return CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, 1);
+				}
 
 				robbery_data[actorid][actor_robbedRecently] = gettime();
 				RunActorAnimationSequence(playerid, actorid, 0);
@@ -249,7 +256,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		}
 	}
    	#if defined actorrob_OnPlayerKeyStateChange
-        	actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
+		actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
     	#else
    	 	return 1;
 	#endif
