@@ -241,7 +241,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME) {
 					return CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, 1); //robbed recently
 				}
-				else if(gettime() - robbery_data[actorid][actor_robbedRecently] > 60 * ROBBERY_WAIT_TIME) {
+				else {
 					 CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, 0); // not robbed recently
 	 				 RunActorAnimationSequence(playerid, actorid, 0);
 					 robbery_data[actorid][actor_robbedRecently] = gettime();
