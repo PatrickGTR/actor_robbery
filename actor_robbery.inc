@@ -45,7 +45,7 @@ static
 	i_actor = 0;
 
 forward RunActorAnimationSequence(playerid, actorid, animation_pattern);
-forward OnPlayerStartRobbery(playerid, actorid, robbed_recently);
+forward OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently);
 forward OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type);
 forward OnPlayerRequestRobbery(playerid, actorid);
 
@@ -253,11 +253,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				}
 
 				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME) {
-					return CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, 1);
+					return CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, true);
 				}
 
 				robbery_data[actorid][actor_robbedRecently] = gettime();
 				RunActorAnimationSequence(playerid, actorid, 0);
+				CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, false);
 			}
 		}
 	}
