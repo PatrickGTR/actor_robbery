@@ -3,7 +3,15 @@
 
 main() {
 	new actor= Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
+	actor = Robbery_CreateActor(5, 192.168, 1.1, 1.10, 90, 1, 5000, 15000);
 
+	printf("total actors: %i", actor);
 	new 
 		Float:x,
 		Float:y,
