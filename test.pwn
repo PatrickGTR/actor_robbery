@@ -29,3 +29,15 @@ main() {
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 	return 1;
 }
+
+public OnPlayerRequestRobbery(playerid, actorid) {
+	new exampleName[24];
+	GetPlayerName(playerid, exampleName, 24);
+	
+	if(!strcmp(exampleName, "COP"))
+	{
+		SendClientMessage(playerid, -1, "COP no ROB.");
+		return 0; // Must return 0 for the robbery to not commence.
+	}
+	return 1;
+}

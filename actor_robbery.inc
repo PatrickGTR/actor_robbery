@@ -45,8 +45,9 @@ static
 	i_actor = 0;
 
 forward RunActorAnimationSequence(playerid, actorid, animation_pattern);
-forward OnPlayerStartRobbery(playerid, actorid, robbed_recently);
+forward OnPlayerStartRobbery(playerid, actorid, bool:robbed_recently);
 forward OnPlayerFinishRobbery(playerid, actorid, robbedmoney, type);
+forward OnPlayerRequestRobbery(playerid, actorid);
 
 
 /*
@@ -246,12 +247,18 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					return 1;
 				}
 
+				if(!OnPlayerRequestRobbery(playerid, actorid))
+				{
+					return 1;
+				}
+
 				if(gettime() - robbery_data[actorid][actor_robbedRecently] < 60 * ROBBERY_WAIT_TIME) {
-					return CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, 1);
+					return CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, true);
 				}
 
 				robbery_data[actorid][actor_robbedRecently] = gettime();
 				RunActorAnimationSequence(playerid, actorid, 0);
+				CallLocalFunction("OnPlayerStartRobbery", "iii", playerid, actorid, false);
 			}
 		}
 	}
@@ -259,6 +266,20 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		return actorrob_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 	#else 
    		return 1;
+	#endif
+}
+
+/* OnPlayerRequestRobbery
+	Usage: return 0 to disallow the robbery.
+	See test.pwn for example.
+*/
+
+public OnPlayerRequestRobbery(playerid, actorid)
+{
+	#if defined actorrob_OnPlayerRequestRobbery
+		return actorrob_OnPlayerRequestRobbery(playerid, actorid);
+	#else
+		return 1; // Default version always wants to returns >1 to allow robbery
 	#endif
 }
 
@@ -286,4 +307,16 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 #define OnPlayerConnect actorrob_OnPlayerConnect
 #if defined actorrob_OnPlayerConnect
     forward actorrob_OnPlayerConnect(playerid);
+#endif
+
+//OnPlayerRequestRobbery directives
+
+#if defined _ALS_OnPlayerRequestRobbery
+    #undef OnPlayerRequestRobbery
+#else
+    #define _ALS_OnPlayerRequestRobbery
+#endif
+#define OnPlayerRequestRobbery actorrob_OnPlayerRequestRobbery
+#if defined actorrob_OnPlayerRequestRobbery
+    forward actorrob_OnPlayerRequestRobbery(playerid);
 #endif
