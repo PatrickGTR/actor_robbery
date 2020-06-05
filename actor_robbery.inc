@@ -243,13 +243,13 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			{
 				new actorid = GetPlayerCameraTargetActor(playerid);
 
-				if(!robbery_data[actorid][actor_created]) {
-					// this fixes the issue with normal create actors.
-					// there was a bug that you aim at an actor and rob it even though it wasn't created by actor_robbery.
+				if(actorid == INVALID_ACTOR_ID) {
 					return 1;
 				}
 
-				if(actorid == INVALID_ACTOR_ID) {
+				if(!robbery_data[actorid][actor_created]) {
+					// this fixes the issue with normal create actors.
+					// there was a bug that you aim at an actor and rob it even though it wasn't created by actor_robbery.
 					return 1;
 				}
 
