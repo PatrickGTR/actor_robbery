@@ -294,7 +294,7 @@ public OnPlayerRequestRobbery(playerid, actorid)
 #if defined _ALS_OnPlayerKeyStateChange
     #undef OnPlayerKeyStateChange
 #else
-    #define _ALS_OnPlayerKeyState
+    #define _ALS_OnPlayerKeyStateChange
 #endif
 
 #define OnPlayerKeyStateChange actorrob_OnPlayerKeyStateChange
