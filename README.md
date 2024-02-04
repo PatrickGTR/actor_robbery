@@ -1,12 +1,12 @@
 # actor_robbery
 
-[![sampctl](https://img.shields.io/badge/sampctl-actor_robbery-2f2f2f.svg?style=for-the-badge)](https://github.com/Patrick/actor_robbery)
+[![sampctl](https://img.shields.io/badge/sampctl-actor_robbery-2f2f2f.svg?style=for-the-badge)](https://github.com/PatrickGTR/actor_robbery)
 
 <!--
 Short description of your library, why it's useful, some examples, pictures or
 videos. Link to your forum release thread too.# actor_robbery
 
-[![sampctl](https://img.shields.io/badge/sampctl-actor_robbery-2f2f2f.svg?style=for-the-badge)](https://github.com/Patrick/actor_robbery)
+[![sampctl](https://img.shields.io/badge/sampctl-actor_robbery-2f2f2f.svg?style=for-the-badge)](https://github.com/PatrickGTR/actor_robbery)
 
 Short description of your library, why it's useful, some examples, pictures or
 videos. Link to your forum release thread too.
@@ -33,10 +33,12 @@ Happy Pawning!
 
 ## Table of Contents
 
-* [Introduction](#introduction)
-* [Installation](#Installation)
-* [Testing](#testing)
-* [Usage](#usage)
+- [actor\_robbery](#actor_robbery)
+	- [Table of Contents](#table-of-contents)
+	- [Introduction](#introduction)
+	- [Installation](#installation)
+	- [Testing](#testing)
+	- [Usage](#usage)
 
 ## Introduction
 
@@ -47,7 +49,7 @@ Inspired by GTA V store robbery.  **actor_robbery.inc** imitates it! You basical
 Simply install to your project:
 
 ```bash
-sampctl package install Patrick/actor_robbery
+sampctl install PatrickGTR/actor_robbery
 ```
 
 Include in your code and begin using the library:
@@ -74,23 +76,37 @@ sampctl package run
 **Functions**
 ```
 Function:
-	CreateActorRobbery
+	Robbery_CreateActor
 
 Info:
 	Creates the robbery actor according to the position set.
 
 Param:
-* skinid -> Skin ID of the robbery actor
-* Float:x -> Coordinate X of the robbery actor
-* Float:y -> Coordinate X of the robbery actor
-* Float:z -> Coordinate X of the robbery actor
-* Float:ang -> Facing angle of the robbery actor
-* actor_vwid -> virtualid of the robbery actor
-* r_moneymin -> Minimum money to be robbed from the robbery actor
-* r_moneymax -> Maximum money to be robbed from the robbery actor
+	* skinid -> Skin ID of the robbery actor
+	* Float:x -> Coordinate X of the robbery actor
+	* Float:y -> Coordinate X of the robbery actor
+	* Float:z -> Coordinate X of the robbery actor
+	* Float:angle -> Facing angle of the robbery actor
+	* actor_vwid -> virtual world id of the robbery actor
+	* r_moneymin -> Minimum money to be robbed from the robbery actor
+	* r_moneymax -> Maximum money to be robbed from the robbery actor
+	* actor_interiorid -> interior id of the robbery actor
+```
 
+```
 Function:
-	GetActorRobberyData
+	Robbery_DestroyActor
+
+Info:
+	Destroys the robbery actor.
+
+Param:
+	* actorid -> ID of robbery actor you want to destroy.
+```
+
+```
+Function:
+	Robbery_GetActorData
 
 Info:
 	Retrieves the actor data
@@ -101,19 +117,11 @@ Param:
 	* &Float:x -> Coordinate X of the robbery actor
 	* &Float:y -> Coordinate X of the robbery actor
 	* &Float:z -> Coordinate X of the robbery actor
-	* &Float:ang -> Facing angle of the robbery actor
-	* &actor_vwid -> virtualid of the robbery actor
+	* &Float:angle -> Facing angle of the robbery actor
+	* &actor_vwid -> virtual world id of the robbery actor
 	* &r_moneymin -> Minimum money to be robbed from the robbery actor
 	* &r_moneymax -> Maximum money to be robbed from the robbery actor
-
-Function:
-	GetActorFreeID
-
-Info:
-	Retrieves the unused ID of an actor.
-
-Param:
-	None
+	* &actor_interiorid -> interior id of the robbery actor
 ```
 
 **Callbacks**
